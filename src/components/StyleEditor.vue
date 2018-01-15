@@ -45,10 +45,9 @@
        /*2017年,哪怕是Web端,也应该实现一些简单的3D效果了.*/
         html{perspective: 1000px;}
       .codeclass{position: fixed; left: 0; top: 0;
-                -webkit-transition: none;
-                transition: 1s;
-                -webkit-transform: rotateY(360deg) translateZ(-200px);
-                transform: rotateY(360deg) translateZ(-200px);
+              -webkit-transition: none;
+              transition: 1s;
+              transform: rotateY(360deg) translateZ(-200px);
                 }
         `
       }
@@ -59,7 +58,7 @@
       setInterval(()=>{
         this.code = this.finalCode.substring(0,PassedTime)
         PassedTime+=1
-      },10)
+      },30)
 
     },
     methods: {},
