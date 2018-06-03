@@ -19,11 +19,9 @@
 
    说明:1.本模拟器概率完全参照官方公布的抽奖概率表,
 
-       没有做十一连保底逻辑,结果仅供参考
+       (但是因为是官方概率,还是可供参考的,欧洲人自觉)
 
-       (但是因为是官方概率,还是可供参考的,非洲人自觉)
-
-       2.写完一共花了我四个小时,仓促可能会有bug,见谅。
+       2.仓促写完,可能会有bug,见谅。
 
         `
       }
@@ -33,7 +31,7 @@
       var PassedTime = 0
       setInterval(()=>{
         this.code = this.finalCode.substring(0,PassedTime)
-        PassedTime+=1
+        PassedTime+=0.5
       },30)
 
     },

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @touchmove.prevent>
     <img src="../static/PICS/background.jpg" class="background" @click="showChoose">
     <welcome v-if="!chooseDisplay"></welcome>
     <choose v-if="chooseDisplay" ></choose>
@@ -31,7 +31,7 @@
 
 <style >
   #app{
-    overflow: hidden;
+    overflow: auto;
   }
   .background{
     width: 100%;
@@ -42,9 +42,9 @@
   }
   .says{
     font-size: 0.4rem;
-    left: 0.1rem;
+    left: 10vw;
     position: absolute;
-    top: 13rem;
+    top: 75vh;
   }
   /**
  * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)

@@ -12,7 +12,14 @@
         <li @click="getGachaUpOnce">单抽桃源村出奇迹</li>
       </ul>
     </div>
-
+    <div class="TotalCount">合计抽取:
+      <div class="colord-number">
+        <div>{{total}}</div>
+        <div>★5:{{level5count}}</div>
+        <div>★4:{{level4count}}</div>
+        <div>★3:{{level3count}}</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -20,7 +27,11 @@
   export default {
     data () {
       return {
-        newsArr:[],
+        total: 0,
+        level5count:0,
+        level4count:0,
+        level3count:0,
+        newsArr: [],
         level5: ['神之御子微微', '幽冥的梅菲尔'],
         level4: ['公主史莱姆', '狂犬多米诺', '七尾.稻荷御澄', '真护·天茧', '莉安夕', '卡库拉拉兹巴', '阿芙莉芒', '宝石迷迷可', '死亡缠绕·萝丝娜', '沼江夜鸣·鵺', '罪骨公主·斯卡莉安'],
         level3: ['MIO', '露库希安', '义贼多米诺', '海歌姬·赛伦', '雷素·鸣', '基雅·库罗', '秋风希露芙', '拉克斯·蕾妮娅', '血口荆棘·辛普拉', '妖蛾子', '高原火角·阿卡铃', '花藕子', '月兔蕾雅', '白浪激流·克洛琪', '桑图艾尔'],
@@ -39,60 +50,95 @@
         let result = Math.random() * 100
         const chance = [1.61, 5.2, 12.5, 80.39, 0.3]
         //设置孵化概率
-        const chanceArray = [1.61,6.81,19.31,99.7,100]
+        const chanceArray = [1.61, 6.81, 19.31, 99.7, 100]
         //当前星级分别为1.61%,6.81%,19.31%,99.7%,100%概率出大于等于5/4/3/2/1星
         level = chanceArray.findIndex((element) => {
           return result < element
         })
-        return 5-level
+        return 5 - level
       },
-      getRandomResult(array){
-        let num=parseInt(array.length*Math.random())
+      getRandomResult (array) {
+        let num = parseInt(array.length * Math.random())
         return array[num]
       },
-      getGachaResult(level){
-        switch (level){
-          case 1:return '★杂鱼(天选之非)'
-          case 2:return '★★杂鱼'
-          case 3:return '★★★'+this.getRandomResult(this.level3)
-          case 4:return '★★★★'+this.getRandomResult(this.level4)
-          case 5:return '★★★★★'+this.getRandomResult(this.level5)
+      getGachaResult (level) {
+        this.total+=1;
+        switch (level) {
+          case 1:
+            return '★杂鱼(天选之非)'
+          case 2:
+            return '★★杂鱼'
+          case 3:
+            this.level3count+=1;
+            return '★★★' + this.getRandomResult(this.level3)
+          case 4:
+            this.level4count+=1;
+            return '★★★★' + this.getRandomResult(this.level4)
+          case 5:
+            this.level5count+=1;
+            return '★★★★★' + this.getRandomResult(this.level5)
+        }
+
+      },
+      getGachaUpResult (level) {
+        let UpRandom = parseInt(10 * Math.random())
+        this.total+=1;
+        switch (level) {
+          case 1:
+            return '★★杂鱼'
+          case 2:
+            return '★★杂鱼'
+          case 3:
+            this.level3count+=1;
+            return UpRandom > 4 ? '★★★' + this.getRandomResult(this.level3) : '★★★野林之歌·木野子'
+          case 4:
+            this.level4count+=1;
+            return UpRandom > 4 ? '★★★★' + this.getRandomResult(this.level4) : '★★★★命运之女·拉米娅'
+          case 5:
+            this.level5count+=1;
+            return UpRandom > 4 ? '★★★★★' + this.getRandomResult(this.level5) : '★★★★★幻翼天角·菲娜'
         }
       },
-      getGachaUpResult(level){
-        let UpRandom=parseInt(10*Math.random())
-        switch (level){
-          case 1:return '★杂鱼(天选之非)'
-          case 2:return '★★杂鱼'
-          case 3:return UpRandom>4?'★★★'+this.getRandomResult(this.level3):'★★★野林之歌·木野子'
-          case 4:return UpRandom>4?'★★★★'+this.getRandomResult(this.level4):'★★★★命运之女·拉米娅'
-          case 5:return UpRandom>4?'★★★★★'+this.getRandomResult(this.level5):'★★★★★幻翼天角·菲娜'
-        }
-      },
-      addLine(){
+      addLine () {
         this.newsArr.push('------十一连分割线-------')
       },
-      getGachaUpOnce(){
-        this.newsArr.push(this.getGachaUpResult(this.cashEggLevel()));
+      getGachaUpOnce () {
+        this.newsArr.push(this.getGachaUpResult(this.cashEggLevel()))
       },
-      getGacha10(){
-        for (let i=0;i<11;i++){
-          this.newsArr.push(this.getGachaResult(this.cashEggLevel()));
+      getGacha10 () {
+        let resultArr = []
+        for (let i = 0; i < 11; i++) {
+          resultArr.push(this.getGachaResult(this.cashEggLevel()))
         }
+        if (resultArr.every((item) => {return item === '★★杂鱼'})) {
+          resultArr.pop()
+          resultArr.push((this.getGachaResult(5 - parseInt(3 * Math.random()))))
+        }
+        resultArr.forEach((item) => {
+          this.newsArr.push(item)
+        })
         this.addLine()
       },
-      getGachaUp10(){
-        for (let i=0;i<11;i++){
-          this.getGachaUpOnce();
+      getGachaUp10 () {
+        let resultArr = []
+        for (let i = 0; i < 11; i++) {
+          resultArr.push(this.getGachaUpResult(this.cashEggLevel()))
         }
+        if (resultArr.every((item) => {return item === '★★杂鱼'})) {
+          resultArr.pop()
+          resultArr.push((this.getGachaResult(5 - parseInt(3 * Math.random()))))
+        }
+        resultArr.forEach((item) => {
+          this.newsArr.push(item)
+        })
         this.addLine()
       },
     },
     watch: {
-      newsArr() {
+      newsArr () {
         this.$nextTick(() => {
-          var container = this.$el.querySelector("#chatContainer");
-          container.scrollTop = container.scrollHeight;
+          var container = this.$el.querySelector('#chatContainer')
+          container.scrollTop = container.scrollHeight
         })
       }
     }
@@ -108,7 +154,8 @@
     border: 4px dashed gray;
     border-radius: 0.75rem;
   }
-  .resultarea{
+
+  .resultarea {
     text-wrap: normal;
     overflow: scroll;
     border: 5px dashed #3E3410;
@@ -121,4 +168,11 @@
     background: #D8D5B0;
   }
 
+  .TotalCount {
+    text-align: center;
+    right: 0;
+    bottom: 15vh;
+    position: absolute;
+    font-size: 0.5rem;
+  }
 </style>
